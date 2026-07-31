@@ -1,7 +1,7 @@
 {
-  "name": "vsc-extension-selection-provider-class-names",
-  "displayName": "Class Name Selection Ranges",
-  "description": "Adds individual class names to VS Code's Expand and Shrink Selection hierarchy.",
+  "name": "expand-class-name-selection",
+  "displayName": "Expand Class Name Selection",
+  "description": "Expands utility class selections from their innermost meaningful part outward.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.125.0"
@@ -15,9 +15,9 @@
   "main": "./out/extension.js",
   "contributes": {
     "configuration": {
-      "title": "Class Name Selection",
+      "title": "Expand Class Name Selection",
       "properties": {
-        "classNameSelection.classFunctions": {
+        "expandClassNameSelection.classFunctions": {
           "type": "array",
           "items": {
             "type": "string"

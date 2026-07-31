@@ -2,7 +2,7 @@ import * as assert from "assert";
 import {
   findClassNameRange,
   findClassNameRanges,
-} from "../class-name-selection";
+} from "../expand-class-name-selection";
 
 interface SourceAtCursor {
   readonly text: string;

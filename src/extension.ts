@@ -3,18 +3,19 @@ import {
   defaultClassFunctions,
   findClassNameRanges,
   type OffsetRange,
-} from "./class-name-selection";
+} from "./expand-class-name-selection";
 
 const supportedLanguages: vscode.DocumentSelector = "*";
 
-class ClassNameSelectionRangeProvider implements vscode.SelectionRangeProvider {
+class ExpandClassNameSelectionRangeProvider
+  implements vscode.SelectionRangeProvider {
   provideSelectionRanges(
     document: vscode.TextDocument,
     positions: readonly vscode.Position[],
   ): vscode.SelectionRange[] {
     const text = document.getText();
     const classFunctions = vscode.workspace
-      .getConfiguration("classNameSelection", document.uri)
+      .getConfiguration("expandClassNameSelection", document.uri)
       .get<readonly string[]>("classFunctions", defaultClassFunctions);
 
     return positions.map((position) => {
@@ -59,7 +60,7 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     vscode.languages.registerSelectionRangeProvider(
       supportedLanguages,
-      new ClassNameSelectionRangeProvider(),
+      new ExpandClassNameSelectionRangeProvider(),
     ),
   );
 }
