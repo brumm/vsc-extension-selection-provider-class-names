@@ -9,3 +9,4 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Add class and className selection ranges.
 - Add configurable class-function selection ranges.
 - Add nested square-bracket and parenthesis selection ranges.
+- Add Tailwind variant-prefix selection ranges.

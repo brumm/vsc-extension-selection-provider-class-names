@@ -146,4 +146,39 @@ suite('Class name selection ranges', () => {
 			],
 		);
 	});
+
+	test('selects a variant value before the complete class name', () => {
+		assert.deepStrictEqual(
+			selectedTexts(
+				'<div className="hover:bg-gra|y-50" />',
+			),
+			['bg-gray-50', 'hover:bg-gray-50'],
+		);
+	});
+
+	test('selects nested variant suffixes from right to left', () => {
+		assert.deepStrictEqual(
+			selectedTexts(
+				'<div className="dark:hover:bg-gra|y-50" />',
+			),
+			[
+				'bg-gray-50',
+				'hover:bg-gray-50',
+				'dark:hover:bg-gray-50',
+			],
+		);
+	});
+
+	test('ignores colons inside arbitrary values', () => {
+		assert.deepStrictEqual(
+			selectedTexts(
+				'<div className="hover:content-[\'a:|b\']" />',
+			),
+			[
+				'\'a:b\'',
+				'content-[\'a:b\']',
+				'hover:content-[\'a:b\']',
+			],
+		);
+	});
 });

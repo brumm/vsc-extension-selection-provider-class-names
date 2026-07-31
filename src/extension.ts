@@ -109,8 +109,73 @@ export function findClassNameRanges(
 		offset,
 		classNameRange,
 	);
+	const variantRanges = findContainingVariantRanges(
+		text,
+		offset,
+		classNameRange,
+	);
 
-	return [...delimiterRanges, classNameRange];
+	return sortAndDeduplicateRanges(
+		[...delimiterRanges, ...variantRanges, classNameRange],
+	);
+}
+
+function findContainingVariantRanges(
+	text: string,
+	offset: number,
+	classNameRange: OffsetRange,
+): OffsetRange[] {
+	const ranges: OffsetRange[] = [];
+	let squareBracketDepth = 0;
+	let parenthesisDepth = 0;
+
+	for (
+		let index = classNameRange.start;
+		index < classNameRange.end;
+		index++
+	) {
+		switch (text[index]) {
+			case '[':
+				squareBracketDepth++;
+				break;
+			case ']':
+				squareBracketDepth = Math.max(0, squareBracketDepth - 1);
+				break;
+			case '(':
+				parenthesisDepth++;
+				break;
+			case ')':
+				parenthesisDepth = Math.max(0, parenthesisDepth - 1);
+				break;
+			case ':':
+				if (
+					squareBracketDepth === 0 &&
+					parenthesisDepth === 0 &&
+					index < offset
+				) {
+					ranges.push({
+						start: index + 1,
+						end: classNameRange.end,
+					});
+				}
+				break;
+		}
+	}
+
+	return ranges;
+}
+
+function sortAndDeduplicateRanges(ranges: OffsetRange[]): OffsetRange[] {
+	const uniqueRanges = new Map<string, OffsetRange>();
+
+	for (const range of ranges) {
+		uniqueRanges.set(`${range.start}:${range.end}`, range);
+	}
+
+	return [...uniqueRanges.values()].sort(
+		(left, right) =>
+			(left.end - left.start) - (right.end - right.start),
+	);
 }
 
 function findContainingDelimiterRanges(
@@ -154,10 +219,7 @@ function findContainingDelimiterRanges(
 		}
 	}
 
-	return ranges.sort(
-		(left, right) =>
-			(left.end - left.start) - (right.end - right.start),
-	);
+	return ranges;
 }
 
 function isInsideClassFunction(

@@ -36,6 +36,12 @@ before the complete class name:
 space → --space-xs → gap-(--space-xs) → complete class list
 ```
 
+Tailwind variants expand from the utility toward the complete token:
+
+```text
+gray → bg-gray-50 → hover:bg-gray-50 → complete class list
+```
+
 ## Class functions
 
 Strings nested in these function calls are supported by default:
